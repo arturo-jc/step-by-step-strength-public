@@ -1,0 +1,73 @@
+<div
+  class="card sm:pl-0 exercise-template-draggable"
+  cdkDrag
+  [class.selected]="targetDropList === exerciseTemplate.key"
+  >
+  <div class="flex flex-column sm:flex-row sm:align-items-center">
+    <div class="px-1">
+      <p-button
+        styleClass="p-button-rounded p-button-text p-button-plain"
+        icon="pi pi-arrows-alt"
+        cdkDragHandle
+        ></p-button>
+    </div>
+  <div class="flex-1">
+    <div class="grid align-items-center">
+      <div class="col-12 sm:col-4 flex align-items-center">
+        <p-button
+          styleClass="p-button-rounded p-button-text"
+          [icon]="collapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-down'"
+          (onClick)="onToggleButtonClicked.emit()"
+          ></p-button>
+        <app-edit-in-place
+          [(text)]="exerciseTemplate.name"
+          (textChange)="onChanges.emit()"
+          placeholder="Enter a name"
+          [displayStyle]="{
+          'font-size': '1.1rem',
+          'font-weight': '500'
+          }"
+          ></app-edit-in-place>
+      </div>
+      <div class="col-9 sm:col-4">
+        <p-radioButton
+          [value]="exerciseTemplate.key"
+          [(ngModel)]="targetDropList"
+          (ngModelChange)="handleSelectDropList($event)"
+          [inputId]="exerciseTemplate.key"
+          ></p-radioButton>
+        <label [for]="exerciseTemplate.key" class="ml-2">Add to this exercise</label>
+      </div>
+      <div class="col-3 sm:col-4 text-right">
+        <p-button
+          icon="pi pi-trash"
+          styleClass="p-button-rounded p-button-outlined p-button-danger"
+          (onClick)="onRemoveExerciseTemplateButtonClicked.emit()"
+          ></p-button>
+      </div>
+    </div>
+    <div
+      [@collapse]="collapsed ? 'collapsed' : 'expanded'"
+      style="overflow: hidden"
+      >
+      <div class="grid">
+        <div class="col-12"
+          cdkDropList
+          [cdkDropListConnectedTo]="connectedTo"
+          [cdkDropListData]="exerciseTemplate"
+          (cdkDropListDropped)="onDropped.emit($event)"
+          [id]="exerciseTemplate.key"
+          >
+          <app-set-template-draggable
+            *ngFor="let setTemplate of exerciseTemplate.setTemplates"
+            [setTemplate]="setTemplate"
+            (onCopyButtonClicked)="onCopyButtonClicked.emit(setTemplate)"
+            (onRemoveButtonClicked)="onRemoveSetTemplateButtonClicked.emit(setTemplate)"
+            (onChanges)="onChanges.emit()"
+            ></app-set-template-draggable>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

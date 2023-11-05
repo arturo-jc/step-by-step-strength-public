@@ -1,0 +1,22 @@
+<button
+    pRipple
+    pButton
+    icon="pi pi-plus"
+    class="p-button-rounded main-button shadow-5"
+    (click)="toggleOverlay()"
+    [@buttonRotate]="overlayVisible ? 'open' : 'close'"
+    ></button>
+
+<div
+    *ngIf="render"
+    [@overlayToggle]="overlayVisible ? 'open' : 'close'"
+    (@overlayToggle.start)="animationInProgress = true"
+    (@overlayToggle.done)="animationInProgress = false"
+    class="overlaypanel overlaypanel-flipped surface-overlay shadow-2 border-round"
+    [ngStyle]="{ 'pointer-events': overlayVisible ? 'auto' : 'none' }"
+    #overlayRef
+    >
+    <div class="overlaypanel-content">
+        <ng-content></ng-content>
+    </div>
+</div>

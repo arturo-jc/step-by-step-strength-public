@@ -1,0 +1,44 @@
+query WorkoutTemplates($filter: WorkoutTemplatesFilter) {
+  workoutTemplates(filter: $filter) {
+    ...FullWorkoutTemplate
+  }
+}
+
+mutation CreateWorkoutTemplates($workoutTemplates: [CreateWorkoutTemplateInput!]!) {
+  createWorkoutTemplates(workoutTemplates: $workoutTemplates) {
+    ...FullWorkoutTemplate
+  }
+}
+
+mutation UpdateWorkoutTemplate(
+ $workoutTemplates: [UpdateWorkoutTemplateInput!]!
+ ) {
+  updateWorkoutTemplates(workoutTemplates: $workoutTemplates) {
+    ...FullWorkoutTemplate
+  }
+}
+
+mutation DeleteWorkoutTemplates($workoutTemplateIds: [String!]!) {
+  deleteWorkoutTemplates(workoutTemplateIds: $workoutTemplateIds)
+}
+
+fragment FullWorkoutTemplate on WorkoutTemplate {
+  ...BaseWorkoutTemplate
+  ...WorkoutTemplate_ExerciseTemplates
+}
+
+fragment BaseWorkoutTemplate on WorkoutTemplate {
+  id
+  name
+  backgroundColor
+  key
+  preset
+  active
+}
+
+fragment WorkoutTemplate_ExerciseTemplates on WorkoutTemplate {
+  exerciseTemplates {
+    ...FullExerciseTemplate
+  }
+}
+

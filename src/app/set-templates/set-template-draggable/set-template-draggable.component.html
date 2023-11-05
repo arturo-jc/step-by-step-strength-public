@@ -1,0 +1,47 @@
+<div
+  class="grid align-items-center set-template-draggable py-2"
+  cdkDrag
+  [cdkDragData]="setTemplate"
+  >
+
+  <div class="col-12 sm:col-3">
+    <p-button
+      styleClass="p-button-text p-button-plain"
+      icon="pi pi-bars"
+      cdkDragHandle
+      [label]="setTemplate.exerciseType"
+      ></p-button>
+  </div>
+
+  <div class="col-10 sm:col-7 p-fluid">
+    <div class="grid">
+
+      <div class="col" *ngFor="let metric of setTemplateMetrics">
+        <app-metric
+          [metric]="metric"
+          [(value)]="setTemplate[metric]"
+          (valueChange)="onChanges.emit()"
+          [editMode]="true"
+          ></app-metric>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-2 sm:col-2 text-right">
+    <div class="p-buttonset">
+      <button
+        pButton
+        icon="pi pi-plus"
+        class="p-button-text"
+        (click)="onCopyButtonClicked.emit()"
+        ></button>
+      <button
+        pButton
+        icon="pi pi-minus"
+        class="p-button-text p-button-danger"
+        (click)="onRemoveButtonClicked.emit()"
+        ></button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  max-height: 100%;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sets {
+  flex: auto;
+  overflow: auto;
+  overflow-x: hidden;
+}

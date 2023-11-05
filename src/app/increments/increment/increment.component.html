@@ -1,0 +1,93 @@
+<div class="grid"
+  [formGroup]="incrementForm"
+  >
+  <div class="col-12">
+    {{ incrementForm.value.increment | incrementDescription : incrementForm.value.frequency : incrementForm.value.frequencyUnit : incrementForm.value.metric }}
+  </div>
+  <div class="col-4 p-fluid">
+    <ng-container [ngSwitch]="incrementForm.value.metric">
+
+      <div *ngSwitchCase="'weight'" class="p-float-label">
+        <p-inputNumber
+          formControlName="increment"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          [max]="999999999.99"
+          id="increment"
+          suffix=" lbs."
+          ></p-inputNumber>
+        <label for="increment">Increment</label>
+      </div>
+
+      <div *ngSwitchCase="'duration'" class="p-float-label">
+        <p-calendar
+          [(ngModel)]="durationIncrementEnd"
+          [ngModelOptions]="{ standalone: true }"
+          [timeOnly]="true"
+          [inline]="false"
+          [showSeconds]="true"
+          appendTo="body"
+          (onSelect)="handleDurationChange()"
+          ></p-calendar>
+        <label for="duration">Duration</label>
+      </div>
+
+      <span *ngSwitchCase="'distance'" class="p-float-label">
+        <p-inputNumber
+          formControlName="increment"
+          id="distance"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          [max]="999999999.99"
+          suffix=" mi"
+          ></p-inputNumber>
+        <label for="distance">Distance</label>
+      </span>
+
+    <span *ngSwitchCase="'incline'" class="p-float-label">
+      <p-inputNumber
+        [(ngModel)]="incline"
+        [ngModelOptions]="{ standalone: true }"
+        [min]="0"
+        [max]="100"
+        suffix="%"
+        id="incline"
+        (onInput)="handleInclineChange()"
+        ></p-inputNumber>
+      <p-slider
+        [(ngModel)]="incline"
+        [ngModelOptions]="{ standalone: true }"
+        class="w-full"
+        (onChange)="handleInclineChange()"
+        ></p-slider>
+      <label for="incline">Incline</label>
+    </span>
+
+    </ng-container>
+  </div>
+  <div class="col-4 p-fluid">
+    <div class="p-float-label">
+      <p-inputNumber
+        formControlName="frequency"
+        [min]="0"
+        id="frequency"
+        [showButtons]="(layoutService.isSmallScreen$ | async) === false"
+        ></p-inputNumber>
+      <label for="frequency">Frequency</label>
+    </div>
+  </div>
+  <div class="col-12 sm:col-4 p-fluid">
+    <div class="p-float-label">
+      <p-dropdown
+        placeholder="Select a frequency unit"
+        formControlName="frequencyUnit"
+        [options]="frequencyUnits"
+        id="frequencyUnit"
+        ></p-dropdown>
+      <label for="frequencyUnit">Frequency Unit</label>
+    </div>
+  </div>

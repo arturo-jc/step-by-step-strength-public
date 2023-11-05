@@ -1,0 +1,10 @@
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.exercise-container {
+  max-height: 50vh;
+  overflow-y: auto;
+}

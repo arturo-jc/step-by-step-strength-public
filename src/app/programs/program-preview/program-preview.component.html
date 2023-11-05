@@ -1,0 +1,84 @@
+<div class="grid">
+  <div class="col-12 sm:col-8" *ngIf="program">
+    <h5 class="mb-0">
+      {{ program.name }}
+    </h5>
+    <small>{{ program | programDescription }}</small>
+  </div>
+  <div class="col-12 sm:col-4" *ngIf="showMutateButtons">
+    <div class="flex gap-2 sm:justify-content-end">
+      <p-button icon="pi pi-trash" label="Delete" [disabled]="!program" styleClass="p-button-danger" (onClick)="deleteProgram()"></p-button>
+      <p-button icon="pi pi-pencil" label="Edit" [disabled]="!program" (onClick)="editProgram()"></p-button>
+    </div>
+  </div>
+
+  <div class="col-12 sm:col-6 flex gap-2 justify-content-between sm:justify-content-start">
+    <ng-content></ng-content>
+  </div>
+  <div class="col-12 sm:col-6 sm:text-right">
+    <p-selectButton
+      [options]="calendarEventViews"
+      [(ngModel)]="selectedView"
+      (onChange)="updateCalendarView()"
+      optionLabel="label"
+      optionValue="value"
+      ></p-selectButton>
+  </div>
+  <div class="col-12 sm:col-3">
+    <p-toggleButton
+      offLabel="Show Times"
+      onLabel="Hide Times"
+      onIcon="pi pi-times"
+      offIcon="pi pi-clock"
+      [(ngModel)]="showTimes"
+      (onChange)="updateCalendarView()"
+      ></p-toggleButton>
+  </div>
+  <div class="col-12 sm:col-6 paginator">
+    <p-button
+      icon="pi pi-chevron-left"
+      styleClass="p-button-rounded p-button-text"
+      (onClick)="goToPrev()"
+      [disabled]="!prevEnabled"
+      ></p-button>
+    <div class="flex-1 text-center">
+      <span class="calendar-date">{{ calendarTitle }}</span>
+    </div>
+    <p-button
+      icon="pi pi-chevron-right"
+      styleClass="p-button-rounded p-button-text"
+      (onClick)="goToNext()"
+      [disabled]="!nextEnabled"
+      ></p-button>
+  </div>
+  <div class="col-3 text-right">
+    <p-button
+      label="Today"
+      icon="pi pi-calendar"
+      (onClick)="goToToday()"
+      [disabled]="!todayEnabled"
+      ></p-button>
+  </div>
+  <div class="col-12">
+    <full-calendar #calendarRef [options]="calendarOptions"></full-calendar>
+  </div>
+</div>
+
+<p-overlayPanel
+  (onHide)="activeWorkout$.next(undefined)"
+  >
+  <ng-template pTemplate="content">
+    <app-workout-preview
+      (mouseenter)="cancelClearOverlayCountdown()"
+      (mouseleave)="overlayPanel?.hide()"
+      *ngIf="activeWorkout$ | async as activeWorkout"
+      [workout]="activeWorkout"
+      style="height: 200px;"
+      ></app-workout-preview>
+  </ng-template>
+</p-overlayPanel>
+
+<p-menu
+  [model]="workoutActions"
+  [popup]="true"
+  ></p-menu>

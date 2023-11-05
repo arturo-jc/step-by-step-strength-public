@@ -1,0 +1,225 @@
+<div [formGroup]="programForm" class="card">
+  <div class="grid">
+    <div class="col-12 sm:col-6 flex align-items-center">
+      <app-edit-in-place
+        formControlName="name"
+        placeholder="Enter a name"
+        (textChange)="markAsChanged()"
+        ></app-edit-in-place>
+    </div>
+    <div class="col-12 sm:col-6 flex gap-2 justify-content-between sm:justify-content-end">
+      <p-button
+        [label]="hasChanges ? 'Discard Changes' : 'Cancel'"
+        [icon]="hasChanges ? 'pi pi-trash' : 'pi pi-arrow-left'"
+        styleClass="p-button-outlined"
+        (onClick)="discardChanges()"
+        ></p-button>
+      <p-button
+        (onClick)="saveChanges(true)"
+        [label]="saving ? 'Saving...' : 'Save Changes'"
+        [icon]="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'"
+        [disabled]="!isValid || saving"
+        ></p-button>
+    </div>
+  </div>
+  <ng-container *ngIf="activeStep$ | async as activeStep">
+    <p-steps
+      styleClass="hidden sm:block"
+      [model]="steps"
+      [readonly]="false"
+      [activeIndex]="activeStep.index"
+      (activeIndexChange)="setActiveStep($event)"
+      ></p-steps>
+    <div class="block sm:hidden p-element">
+      <div class="p-steps p-component">
+        <div class="ul flex justify-content-between align-items-center" role="tablist">
+          <li class="p-element p-steps-item">
+            <a
+              role="presentation"
+              class="p-menuitem-link"
+              [class.disabled]="activeStep.index === 0"
+              (click)="activeStep.index > 0 && setActiveStep(activeStep.index - 1)"
+              >
+              <span class="p-steps-number">
+                <i class="pi pi-angle-left"></i>
+              </span>
+            </a>
+          </li>
+          <li class="p-element p-steps-item p-steps-current">
+            <a
+              role="presentation"
+              class="p-menuitem-link flex-column"
+              >
+              <span class="p-steps-number">{{ activeStep.index + 1 }}</span>
+              <div
+                [style]="{ top: '3.5rem' }"
+                class="p-steps-title absolute">
+                {{ steps[activeStep.index].label }}
+              </div>
+            </a>
+          </li>
+          <li class="p-element p-steps-item">
+            <a
+              role="presentation"
+              class="p-menuitem-link"
+              (click)="activeStep.index < steps.length - 1 && setActiveStep(activeStep.index + 1)"
+              [class.disabled]="activeStep.index === steps.length - 1"
+              >
+              <span class="p-steps-number">
+                <i class="pi pi-angle-right"></i>
+              </span>
+            </a>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 py-2">
+      <p-message *ngIf="programForm.errors?.['maxWorkouts']" severity="error" [text]="warnings.maxWorkoutsMessage"></p-message>
+      <p-message *ngIf="programForm.controls.increments.invalid" severity="error" [text]="warnings.invalidIncrements"></p-message>
+    </div>
+    <div [ngSwitch]="activeStep.index">
+      <p-fieldset legend="Basic Info" *ngSwitchCase="0">
+        <div class="grid">
+          <div class="col-12 md:col-8 sm:flex-order-2">
+            <app-schedule-preview
+              *ngIf="selectedBaseSchedule$ | async as selectedBaseSchedule; else placeholder"
+              showTimesPosition="right"
+              [schedule]="selectedBaseSchedule"
+              [weeks]="selectedBaseSchedule.weeks"
+              [previewWorkoutTemplateOnHover]="true"
+              ></app-schedule-preview>
+          </div>
+          <div class="col-12 md:col-4 p-fluid">
+            <div class="grid">
+              <div class="col-12 sm:col-6 md:col-12">
+                <app-schedule-dropdown
+                  formControlName="baseSchedule"
+                  ></app-schedule-dropdown>
+              </div>
+              <div class="col-12 sm:col-6 md:col-12">
+                <div class="p-float-label">
+                  <p-calendar
+                    formControlName="startDate"
+                    dataType="string"
+                    dateFormat="yy/mm/dd"
+                    id="startDate"
+                    [readonlyInput]="true"
+                    [touchUI]="(layoutService.isSmallScreen$ | async) === true"
+                    ></p-calendar>
+                  <label for="startData">Start Date</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-fieldset>
+      <p-fieldset legend="Duration" *ngSwitchCase="1">
+        <div class="grid">
+          <div class="col-12 sm:col-5">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <p-radioButton value="weeks" formControlName="durationType"></p-radioButton>
+              </span>
+              <div class="p-float-label">
+                <p-inputNumber
+                  [inputStyle]="{
+                  'border-radius': 0
+                  }"
+                  formControlName="weeks"
+                  id="weeks"
+                  [showButtons]="true"
+                  [min]="1"
+                  ></p-inputNumber>
+                <label for="weeks">Weeks</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 sm:col-2">
+            <p-divider layout="vertical" class="hidden sm:inline">
+              <b>OR</b>
+            </p-divider>
+            <p-divider align="center" class="sm:hidden">
+              <b>OR</b>
+            </p-divider>
+          </div>
+          <div class="col-12 sm:col-5">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <p-radioButton value="endDate" formControlName="durationType"></p-radioButton>
+              </span>
+              <div class="p-float-label">
+                <p-calendar
+                  *ngIf="chosenStartDate$ | async as chosenStartDate"
+                  #endDateCalendar
+                  formControlName="endDate"
+                  dataType="string"
+                  dateFormat="yy/mm/dd"
+                  id="endDate"
+                  [readonlyInput]="true"
+                  [minDate]="chosenStartDate"
+                  [touchUI]="(layoutService.isSmallScreen$ | async) === true"
+                  [style]="{
+                  height: '100%',
+                  width: '100%'
+                  }"
+                  [inputStyle]="{
+                  'border-top-left-radius': 0,
+                  'border-bottom-left-radius': 0,
+                  }"
+                  ></p-calendar>
+                <label for="endDate">End Date</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-fieldset>
+      <ng-container *ngSwitchCase="2">
+        <p-message *ngIf="incrementsByExerciseType.length === 0" severity="warn" [text]="warnings.noSchedule"></p-message>
+        <p-fieldset
+          *ngFor="let increment of incrementsByExerciseType"
+          [legend]="increment.header"
+          [toggleable]="true"
+          styleClass="mb-2"
+          >
+          <ng-container
+            *ngFor="let form of increment.increments; index as i"
+            >
+            <app-increment
+              [incrementForm]="form"
+              ></app-increment>
+            <hr *ngIf="i < increment.increments.length - 1">
+          </ng-container>
+        </p-fieldset>
+      </ng-container>
+      <ng-container *ngSwitchCase="3">
+        <app-program-preview
+          [(workouts)]="workouts"
+          (workoutsChange)="markAsChanged()"
+          [editable]="true"
+          [showMutateButtons]="false"
+          >
+          <p-button
+            [label]="generating ? 'Processing...' : workouts.length > 0 ? 'Re-Do' : 'Generate'"
+            [icon]="generating ? 'pi pi-spin pi-spinner' : workouts.length > 0 ? 'pi pi-refresh' : 'pi pi-play'"
+            [disabled]="!programForm.valid || generating"
+            (onClick)="onGenerateProgram$.next()"
+            ></p-button>
+          <p-button
+            label="Download ICS"
+            icon="pi pi-download"
+            (onClick)="downloadProgramIcs()"
+            [disabled]="workouts.length === 0"
+            styleClass="p-button-outlined"
+            ></p-button>
+        </app-program-preview>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #placeholder>
+  <app-selected-item-placeholder
+    [placeholderText]="'Select a schedule to preview it here'"
+    [icon]="resourceMap['schedules'].icon"
+    height="50vh"
+    ></app-selected-item-placeholder>
+</ng-template>

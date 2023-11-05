@@ -1,0 +1,125 @@
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import "assets/demo/flags/flags.css";
+@import "./assets/demo/documentation.scss";
+
+/* You can add global styles to this file, and also import other style files */
+.p-listbox .p-listbox-header {
+  padding: 0.5rem 1rem;
+  justify-content: space-between;
+}
+
+.no-inner-padding .p-listbox .p-listbox-list .p-listbox-item {
+  padding: 0;
+
+  .item {
+    padding: 1rem;
+    flex: 1;
+  }
+}
+
+.p-listbox .p-listbox-list .p-listbox-item .p-ink {
+  display: none;
+}
+
+.p-steps .p-steps-item .p-menuitem-link {
+  cursor: pointer;
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder.set-template-draggable,
+.cdk-drag-placeholder .set-template-draggable {
+  background-color: var(--surface-hover);
+}
+
+.cdk-drag-placeholder.exercise-template-draggable,
+.cdk-drag-placeholder .exercise-template-draggable {
+  background-color: var(--surface-hover);
+
+  .set-template-draggable {
+    background-color: unset;
+  }
+}
+
+.cdk-drag-preview{
+  opacity: 0.3;
+}
+
+.selected .p-fieldset {
+  border: 1px solid var(--primary-color);
+}
+
+.fc.fc-theme-standard .fc-view-harness .fc-event.fc-daygrid-block-event .fc-event-main .main-container {
+  padding: 0 0.5rem;
+}
+
+.fc-event {
+  cursor: pointer;
+}
+
+ // Layout changes
+.layout-wrapper .layout-main {
+  flex: 1 1 0;
+  margin-left: 50px;
+  padding: 60px 0px 0px 0px;
+  -moz-transition: margin-left 0.3s;
+  -o-transition: margin-left 0.3s;
+  -webkit-transition: margin-left 0.3s;
+  transition: margin-left 0.3s;
+}
+
+.layout-main .layout-main-content {
+  padding: 20px 10px 0px 20px;
+  background-color: var(--surface-ground);
+  min-height: calc(100vh - 60px);
+}
+
+@media (max-width: 640px) {
+  .layout-wrapper .layout-main {
+    margin-left: 40px;
+  }
+
+  .layout-main .layout-main-content {
+    padding: 20px 10px 0px 10px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .layout-wrapper.layout-wrapper-menu-active .layout-main {
+    margin-left: 300px;
+  }
+}
+
+.layout-wrapper .topbar .topbar-menu > li.profile-item .profile-image img {
+  border-radius: 50%;
+}
+
+.p-timeline-vertical.p-timeline-alternate .p-timeline-event-content {
+  display: flex;
+  align-items: center; /* Vertical centering */
+  justify-content: flex-end; /* Right align the button */
+  text-align: right;
+}
+
+/* Optional: If you also want to center the button in odd numbered events */
+.p-timeline-vertical.p-timeline-alternate .p-timeline-event:nth-child(odd) .p-timeline-event-content {
+  justify-content: flex-start; /* Left align the button */
+}
+
+.layout-wrapper .topbar .app-name {
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 0;
+  height: 45px;
+  position: relative;
+  right: 20px;
+}

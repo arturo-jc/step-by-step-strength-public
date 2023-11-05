@@ -1,0 +1,66 @@
+<div class="main-container">
+  <div *ngIf="workout">
+    <h5>
+      {{ workout.name }}
+    </h5>
+  </div>
+  <div class="sets">
+    <p-table
+      *ngIf="workout"
+      [value]="programSets"
+      [customSort]="true"
+      [columns]="cols"
+      dataKey="exerciseKey"
+      sortMode="single"
+      [scrollable]="true"
+      rowGroupMode="subheader"
+      groupRowsBy="exerciseKey"
+      [expandedRowKeys]="expandedRowKeys"
+      >
+      <ng-template pTemplate="header">
+        <th class="p-3" style="width:2rem"></th>
+        <th class="text-left p-3">Exercise</th>
+        <ng-container *ngFor="let col of cols">
+          <th class="text-left p-3" *ngIf="col.active">
+            {{ col.header }}
+        </ng-container>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-programSet let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              [pRowToggler]="programSet"
+              class="p-button-text p-button-rounded p-button-plain mr-2"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              ></button>
+          </td>
+          <td class="text-800 font-medium">
+              {{ programSet.exerciseName }}
+          </td>
+          <td [attr.colspan]="activeColCount + 1"></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-programSet>
+        <tr>
+          <td class="text-center">
+            {{ programSet.order }}
+          </td>
+          <td>
+            {{ programSet.exerciseType }}
+          </td>
+          <ng-container *ngFor="let col of cols">
+            <td *ngIf="col.active">
+              <app-metric
+                [metric]="col.field"
+                [value]="programSet[col.field]"
+                ></app-metric>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

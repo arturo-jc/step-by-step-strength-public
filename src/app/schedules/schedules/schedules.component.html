@@ -1,0 +1,63 @@
+<div class="card">
+  <div class="grid">
+    <div class="col-12 sm:col-6">
+      <h4>
+        <i class="pi pi-calendar" style="font-size: 1.5rem"></i>
+        Schedules
+      </h4>
+    </div>
+    <div class="col-12 sm:col-6">
+      <div class="flex gap-2 justify-content-between sm:justify-content-end">
+        <p-toggleButton
+          offLabel="Hide Prests"
+          onLabel="Show Presets"
+          onIcon="pi pi-eye"
+          offIcon="pi pi-eye-slash"
+          (onChange)="toggleHidePresets($event.checked)"
+          ></p-toggleButton>
+        <p-button label="New" icon="pi pi-plus" [routerLink]="[ 'new' ]"></p-button>
+      </div>
+    </div>
+    <div class="col-12 sm:col-8 sm:flex-order-2">
+      <app-schedule-preview
+        *ngIf="selectedSchedule"
+        [schedule]="selectedSchedule"
+        [weeks]="selectedSchedule.weeks"
+        [showMutateButtons]="true"
+        [previewWorkoutTemplateOnHover]="true"
+        ></app-schedule-preview>
+        <app-selected-item-placeholder
+          *ngIf="!selectedSchedule"
+          [placeholderText]="'Select a schedule to preview it here'"
+          [icon]="resourceMap['schedules'].icon"
+          ></app-selected-item-placeholder>
+    </div>
+    <div class="col-12 sm:col-4 max-height">
+      <p-listbox
+        *ngIf="filteredSchedules$ | async as schedules"
+        emptyMessage="You have no schedules yet"
+        [options]="schedules"
+        [(ngModel)]="selectedSchedule"
+        [listStyle]="{'max-height':'250px'}"
+        optionLabel="name"
+        [style]="{ height: '100%' }"
+        [listStyle]="{ overflow: 'auto', maxHeight: '100%' }"
+        >
+        <ng-template let-schedule pTemplate="item">
+          <div>
+            <div class="flex align-items-center">
+              <span class="font-bold mr-2">
+                {{ schedule.name }}
+              </span>
+            <app-preset-indicator
+              [preset]="schedule.preset"
+              objectType="schedule"
+              ></app-preset-indicator>
+            </div>
+            <small>{{ schedule | scheduleDescription : (workoutTemplatesService.workoutTemplates$ | async) }}</small>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+fragment BaseWorkout on Workout {
+  id
+  name
+  backgroundColor
+  start
+  end
+}
+
+fragment Workout_Exercises on Workout {
+  exercises {
+    ...FullExercise
+  }
+}
+
+fragment FullWorkout on Workout {
+  ...BaseWorkout
+  ...Workout_Exercises
+}

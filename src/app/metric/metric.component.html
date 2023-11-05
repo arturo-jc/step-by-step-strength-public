@@ -1,0 +1,105 @@
+<ng-container *ngIf="editMode; else readonly">
+  <ng-container [ngSwitch]="metric">
+
+    <span *ngSwitchCase="'reps'" class="p-float-label">
+      <p-inputNumber
+        [(ngModel)]="value"
+        [showButtons]="true"
+        [min]="1"
+        id="reps"
+        (onInput)="handleValueChange($event.value)"
+        ></p-inputNumber>
+      <label for="reps">Reps</label>
+    </span>
+
+    <span *ngSwitchCase="'weight'" class="p-float-label">
+      <p-inputNumber
+        [(ngModel)]="value"
+        mode="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        [min]="0"
+        [max]="999999999.99"
+        suffix=" lbs."
+        id="weight"
+        (onInput)="handleValueChange($event.value)"
+        ></p-inputNumber>
+      <label for="weight">Weight</label>
+    </span>
+
+    <span *ngSwitchCase="'duration'" class="p-float-label">
+      <p-calendar
+        [(ngModel)]="editDurationEnd"
+        [timeOnly]="true"
+        [inline]="false"
+        [showSeconds]="true"
+        appendTo="body"
+        (onSelect)="handleDurationChange()"
+        ></p-calendar>
+      <label for="duration">Duration</label>
+    </span>
+
+    <span *ngSwitchCase="'distance'" class="p-float-label">
+      <p-inputNumber
+        [(ngModel)]="value"
+        id="distance"
+        mode="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        [min]="0"
+        [max]="999999999.99"
+        suffix=" mi"
+        (onInput)="handleValueChange($event.value)"
+        ></p-inputNumber>
+      <label for="distance">Distance</label>
+    </span>
+
+    <p-button
+      *ngSwitchCase="'intensity'"
+      [label]="intensityMap[intensity].label"
+      [styleClass]="intensityMap[intensity].styleClass"
+      [icon]="intensityMap[intensity].icon"
+      (onClick)="toggleIntensity()"
+      ></p-button>
+
+    <span *ngSwitchCase="'incline'" class="p-float-label">
+      <p-inputNumber
+        [(ngModel)]="incline"
+        [min]="0"
+        [max]="100"
+        suffix="%"
+        id="incline"
+        (onInput)="handleInclineChange()"
+        ></p-inputNumber>
+      <p-slider
+        [(ngModel)]="incline"
+        class="w-full"
+        (onChange)="handleInclineChange()"
+        ></p-slider>
+      <label for="incline">Incline</label>
+    </span>
+
+  </ng-container>
+</ng-container>
+
+<ng-template #readonly>
+  <ng-container *ngIf="value !== null && value !== undefined; else empty">
+    <ng-container [ngSwitch]="metric">
+      <span *ngSwitchCase="'reps'">{{ value }}</span>
+      <span *ngSwitchCase="'weight'">{{ value }} lbs.</span>
+      <span *ngSwitchCase="'duration'">{{ readOnlyDuration }}</span>
+      <span *ngSwitchCase="'distance'">{{ value }} mi</span>
+      <span *ngSwitchCase="'incline'">{{ incline }}%</span>
+      <p-tag
+        *ngSwitchCase="'intensity'"
+        [value]="intensityMap[intensity].label"
+        [icon]="intensityMap[intensity].icon"
+        [severity]="intensityMap[intensity].severity"
+        ></p-tag>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #empty>
+  <span class="p-text-secondary">N/A</span>
+</ng-template>

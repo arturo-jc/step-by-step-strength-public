@@ -1,0 +1,37 @@
+<div class="p-float-label">
+  <p-dropdown
+    #dropdown
+    *ngIf="schedulesService.schedules$ | async as schedules"
+    placeholder="Select a schedule"
+    [(ngModel)]="selectedSchedule"
+    (onChange)="onChange($event.value)"
+    [options]="schedules"
+    optionLabel="name"
+    id="baseSchedule"
+    [filter]="true"
+    [overlayOptions]="{
+      style: {
+        'max-width': '80%'
+      }
+    }"
+    appendTo="body"
+    >
+    <ng-template let-schedule pTemplate="item">
+      <div>
+        <div class="font-bold mr-2">
+          {{ schedule.name }}
+        </div>
+        <small>{{ schedule | scheduleDescription : (workoutTemplatesService.workoutTemplates$ | async) }}</small>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptyfilter">
+      <p-button
+        [label]="'Add ' + dropdown._filterValue"
+        styleClass="p-button-text"
+        icon="pi pi-plus"
+        (onClick)="goToCreateSchedule(dropdown._filterValue)"
+        ></p-button>
+    </ng-template>
+  </p-dropdown>
+  <label for="baseSchedule">Schedule</label>
+</div>

@@ -1,0 +1,44 @@
+query Schedules($filter: SchedulesFilter) {
+  schedules(filter: $filter) {
+    ...FullSchedule
+  }
+}
+
+mutation CreateSchedules($schedules: [CreateScheduleInput!]!) {
+  createSchedules(schedules: $schedules) {
+    ...FullSchedule
+  }
+}
+
+mutation UpdateSchedule(
+  $schedules: [UpdateScheduleInput!]!
+) {
+  updateSchedules(schedules: $schedules) {
+    ...FullSchedule
+  }
+}
+
+mutation DeleteSchedules($scheduleIds: [String!]!) {
+  deleteSchedules(scheduleIds: $scheduleIds)
+}
+
+fragment FullSchedule on Schedule {
+  ...BaseSchedule
+  ...Schedule_ScheduleWeeks
+}
+
+fragment BaseSchedule on Schedule {
+  id
+  key
+  name
+  preset
+  active
+}
+
+fragment Schedule_ScheduleWeeks on Schedule {
+  weeks {
+    ...BaseScheduleWeek
+  }
+}
+
+

@@ -1,0 +1,53 @@
+<div class="topbar clearfix">
+  <div class="logo">
+    <a [routerLink]="[ '/' ]">
+      <img src="assets/layout/images/logo-sm.svg">
+    </a>
+  </div>
+
+  <a [routerLink]="[ '/' ]">
+    <img src="assets/layout/images/logo-text.svg" class="app-name"/>
+  </a>
+
+  <a id="topbar-menu-button" href="#" (click)="appMain.onTopbarMenuButtonClick($event)">
+    <i class="pi pi-bars"></i>
+  </a>
+
+  <ul class="topbar-menu fadeInDown" [ngClass]="{'topbar-menu-visible': appMain.topbarMenuActive}">
+    <li
+      #profile
+      *ngIf="auth.user$ | async as user"
+      class="profile-item"
+      [ngClass]="{'active-topmenuitem':appMain.activeTopbarItem === profile}"
+      >
+      <a href="#" (click)="appMain.onTopbarItemClick($event,profile)">
+        <div class="profile-image">
+          <img [src]="user.profileUrl">
+        </div>
+        <div class="profile-info">
+          <span class="topbar-item-name profile-name">{{ user.username || 'Anonymous' }}</span>
+          <span class="topbar-item-name profile-role">{{ user.userEmail }}</span>
+        </div>
+      </a>
+
+      <ul class="fadeInDown">
+        <li role="menuitem">
+          <a href="#" (click)="appMain.onTopbarSubItemClick($event); auth.logOut()">
+            <i class="pi pi-sign-out"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li
+      *ngIf="(auth.user$ | async) === null"
+      #authenticate
+      [ngClass]="{'active-topmenuitem':appMain.activeTopbarItem === authenticate}"
+      >
+      <a [routerLink]="[ '/signup' ]" (click)="appMain.onTopbarItemClick($event,authenticate)">
+        <i class="topbar-icon pi pi-sign-in"></i>
+        <span class="topbar-item-name">Authenticate</span>
+      </a>
+    </li>
+  </ul>
+</div>

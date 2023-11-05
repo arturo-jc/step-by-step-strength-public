@@ -1,0 +1,55 @@
+<ng-container *ngIf="exerciseItems$ | async as exerciseItems">
+  <p-listbox
+    #listBox
+    class="no-inner-padding"
+    [options]="exerciseItems"
+    cdkDropList
+    [cdkDropListConnectedTo]="dropListConnectedTo"
+    cdkDropListSortingDisabled
+    [filter]="true"
+    [readonly]="true"
+    [group]="true"
+    [listStyle]="{ maxHeight: '15rem' }"
+    filterBy="exerciseType"
+    id="exercise-items"
+    >
+    <ng-template let-item pTemplate="item">
+      <div
+        class="item"
+        cdkDrag
+        [cdkDragData]="item"
+        (cdkDragStarted)="onDragStarted.emit($event)"
+        >
+        <span>
+          {{ item.exerciseType }}
+        </span>
+        <span>
+          <p-button
+            *ngIf="!item.preset"
+            styleClass="p-button-text p-button-plain p-button-danger"
+            icon="pi pi-times"
+            (onClick)="$event.stopPropagation(); confirmDeleteExerciseItem(item)"
+            ></p-button>
+        </span>
+        <div *cdkDragPlaceholder>
+          <app-exercise-template-draggable
+            *ngIf="placeholderType === 'exercise'"
+            [placeholderForExerciseItem]="item"
+            ></app-exercise-template-draggable>
+          <app-set-template-draggable
+            *ngIf="placeholderType === 'set'"
+            [placeholderForExerciseItem]="item"
+            ></app-set-template-draggable>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptyfilter">
+      <p-button
+        [label]="'Add ' + listBox._filterValue"
+        styleClass="p-button-text"
+        icon="pi pi-plus"
+        (onClick)="openCreateExerciseItemDialog(listBox._filterValue)"
+        ></p-button>
+    </ng-template>
+  </p-listbox>
+</ng-container>

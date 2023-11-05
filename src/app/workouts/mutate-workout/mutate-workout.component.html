@@ -1,0 +1,33 @@
+<ng-container *ngIf="editedWorkout">
+  <div cdkDropListGroup class="exercise-container">
+    <div
+      *ngFor="let exercise of editedWorkout.exercises"
+      cdkDropList
+      class="card"
+      [cdkDropListData]="exercise"
+      (cdkDropListDropped)="onDrop($event)"
+      >
+      <h5>{{ exercise.name }}</h5>
+      <app-set-template-draggable
+        *ngFor="let programSet of exercise.sets"
+        [setTemplate]="programSet"
+        (onCopyButtonClicked)="copySet(programSet, exercise)"
+        (onRemoveButtonClicked)="removeSet(programSet, exercise)"
+        ></app-set-template-draggable>
+    </div>
+  </div>
+  <div class="p-dialog-footer">
+    <p-button
+      label="cancel"
+      icon="pi pi-times"
+      styleClass="p-button-outlined p-button-danger"
+      (onClick)="cancel()"
+      ></p-button>
+    <p-button
+      label="Apply changes"
+      icon="pi pi-check"
+      (onClick)="applyChanges()"
+      [disabled]="editedWorkout.exercises.length === 0"
+      ></p-button>
+  </div>
+</ng-container>

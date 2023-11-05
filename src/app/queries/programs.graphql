@@ -1,0 +1,46 @@
+query UserPrograms($userId: String!, $filter: UserProgramsFilter) {
+  user(userId: $userId) {
+    ...BaseUser
+    ...User_Programs
+  }
+}
+
+mutation CreatePrograms($programs: [CreateProgramInput!]!) {
+  createPrograms(programs: $programs) {
+    ...FullProgram
+  }
+}
+
+mutation UpdateProgram(
+  $programs: [UpdateProgramInput!]!
+) {
+  updatePrograms(programs: $programs) {
+    ...FullProgram
+  }
+}
+
+mutation DeletePrograms($programIds: [String!]!) {
+  deletePrograms(programIds: $programIds)
+}
+
+fragment User_Programs on User {
+  programs(filter: $filter) {
+    ...FullProgram
+  }
+}
+
+fragment BaseProgram on Program {
+  id
+  name
+}
+
+fragment Program_Workouts on Program {
+  workouts {
+    ...FullWorkout
+  }
+}
+
+fragment FullProgram on Program {
+  ...BaseProgram
+  ...Program_Workouts
+}

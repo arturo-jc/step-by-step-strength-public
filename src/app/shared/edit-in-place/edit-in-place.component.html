@@ -1,0 +1,29 @@
+<p-inplace
+  #inplace
+  sytle="display: inline; "
+  (click)="$event.stopPropagation()"
+  (onActivate)="handleActivate()"
+  [disabled]="disabled"
+  >
+  <ng-template pTemplate="display">
+    <span [style]="displayStyle">
+      {{ text}} <i class="pi pi-pencil ml-2"></i>
+    </span>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <div class="p-inputgroup">
+      <input
+      pInputText
+      #inputModelRef="ngModel"
+      (keydown.enter)="updateText()"
+      [placeholder]="placeholder"
+      [(ngModel)]="editedText"
+      type="text"
+      required
+      >
+      <button type="button" pButton icon="pi pi-check" [disabled]="!inputModelRef.valid" (click)="updateText()"></button>
+      <button typ="button" pButton icon="pi pi-times" class="p-button-outlined" (click)="inplace.deactivate()"></button>
+    </div>
+  </ng-template>
+</p-inplace>
+

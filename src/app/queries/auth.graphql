@@ -1,0 +1,46 @@
+query LogIn($email: String!, $password: String!) {
+  logIn(
+    credentials: {
+      email: $email,
+      password: $password
+    }) {
+    ...BaseAuthenticateOutput
+  }
+}
+
+query Authenticate {
+    authenticate {
+    ...BaseAuthenticateOutput
+    }
+  }
+
+query LogOut {
+  logOut
+}
+
+mutation SignUp($email: String!, $password: String!, $username: String) {
+  signUp(
+    credentials: {
+      email: $email,
+      password: $password,
+      username: $username
+    }
+  ) {
+    ...BaseAuthenticateOutput
+  }
+}
+
+mutation SignInWithGoogle($idToken: String!) {
+  signInWithGoogle(idToken: $idToken) {
+    ...BaseAuthenticateOutput
+  }
+}
+
+
+fragment BaseAuthenticateOutput on AuthenticateOutput {
+  userId
+  userEmail
+  username
+  role
+  profileUrl
+}

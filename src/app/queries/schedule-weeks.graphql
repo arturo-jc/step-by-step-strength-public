@@ -1,0 +1,15 @@
+fragment FullScheduleWeek on ScheduleWeek {
+  ...BaseScheduleWeek
+}
+
+fragment BaseScheduleWeek on ScheduleWeek {
+  id
+  ...ScheduleWeek_ScheduleWorkouts
+}
+
+
+fragment ScheduleWeek_ScheduleWorkouts on ScheduleWeek {
+  workouts {
+    ...BaseScheduleWorkout
+  }
+}

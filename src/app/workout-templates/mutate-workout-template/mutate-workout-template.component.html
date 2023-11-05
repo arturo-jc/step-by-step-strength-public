@@ -1,0 +1,68 @@
+<div class="card">
+  <div class="grid">
+    <div class="col-12 sm:col-6 flex align-items-center">
+      <p-colorPicker [(ngModel)]="backgroundColor" class="mr-2" (onChange)="markAsChanged()"></p-colorPicker>
+      <app-edit-in-place
+        #editNameInPlace
+        [(text)]="name"
+        placeholder="Enter a name"
+        (textChange)="markAsChanged()"
+        ></app-edit-in-place>
+    </div>
+    <div class="col-12 sm:col-6 flex gap-2 justify-content-between sm:justify-content-end">
+      <p-button
+        [label]="hasChanges ? 'Discard Changes' : 'Cancel'"
+        [icon]="hasChanges ? 'pi pi-trash' : 'pi pi-arrow-left'"
+        styleClass="p-button-outlined"
+        (onClick)="discardChanges()"
+        ></p-button>
+      <span
+        [pTooltip]="hasChanges ? undefined : 'No changes to save'"
+        tooltipPosition="bottom"
+        >
+        <p-button (onClick)="saveChanges(true)"
+          [label]="saving ? 'Saving...' : 'Save Changes'"
+          [icon]="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'"
+          [disabled]="!exerciseTemplates.length || editNameInPlace.active || saving || !hasChanges"
+          ></p-button>
+      </span>
+    </div>
+  </div>
+
+  <p-fieldset [class.selected]="targetDropList === exerciseTemplatesDropListId" styleClass="p-0 md:px-2">
+    <ng-template pTemplate="header">
+      <p-radioButton
+        [value]="exerciseTemplatesDropListId"
+        [(ngModel)]="targetDropList"
+        [inputId]="exerciseTemplatesDropListId"
+        ></p-radioButton>
+      <label [for]="exerciseTemplatesDropListId" class="ml-2">Add to this list</label>
+    </ng-template>
+    <div
+      style="list-style-type: none; min-height: 30rem"
+      cdkDropList
+      (cdkDropListDropped)="onExerciseTemplateListDrop($event)"
+      [cdkDropListData]="exerciseTemplates"
+      [id]="exerciseTemplatesDropListId"
+      >
+      <div *ngFor="let exerciseTemplate of exerciseTemplates">
+        <app-exercise-template-draggable
+          [exerciseTemplate]="exerciseTemplate"
+          [connectedTo]="exerciseTemplateDropLists"
+          [collapsed]="collapsedExerciseTemplateMap[exerciseTemplate.key]"
+          [(targetDropList)]="targetDropList"
+          (onDropped)="onExerciseTemplateDrop($event)"
+          (onToggleButtonClicked)="toggleExerciseTemplateCollapsed(exerciseTemplate)"
+          (onRemoveExerciseTemplateButtonClicked)="removeExerciseTemplate(exerciseTemplate)"
+          (onCopyButtonClicked)="copySetTemplate($event, exerciseTemplate)"
+          (onRemoveSetTemplateButtonClicked)="removeSetTemplate($event, exerciseTemplate)"
+          (onChanges)="markAsChanged()"
+          ></app-exercise-template-draggable>
+      </div>
+    </div>
+  </p-fieldset>
+</div>
+
+<app-fixed-overlay #fixedOverlay>
+  <app-exercise-items [dropListConnectedTo]="targetDropList || []" (onDragStarted)="fixedOverlay.hide()"></app-exercise-items>
+</app-fixed-overlay>

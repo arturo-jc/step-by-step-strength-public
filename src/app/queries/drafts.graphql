@@ -1,0 +1,3 @@
+mutation SaveDrafts($drafts: SaveDraftsInput!) {
+  saveDrafts(drafts: $drafts)
+}

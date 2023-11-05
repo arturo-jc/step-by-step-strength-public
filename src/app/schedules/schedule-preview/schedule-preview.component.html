@@ -1,0 +1,120 @@
+<div class="grid">
+  <div class="col-12 sm:col" *ngIf="schedule">
+    <div class="flex gap-2 align-items-center">
+      <h5 class="mb-0">
+        {{ schedule.name }}
+      </h5>
+      <app-preset-indicator
+        [preset]="schedule.preset"
+        objectType="schedule"
+        ></app-preset-indicator>
+    </div>
+    <small>{{ schedule | scheduleDescription : (workoutTemplatesService.workoutTemplates$ | async) }}</small>
+  </div>
+  <div class="col-12 sm:col-4">
+    <div class="flex sm:justify-content-end">
+      <p-splitButton
+        *ngIf="showMutateButtons"
+        label="Use"
+        pTooltip="Use this schedule to generate a program"
+        tooltipPosition="left"
+        icon="pi pi-play"
+        (onClick)="generateProgram()"
+        [model]="scheduleActions"
+        ></p-splitButton>
+    </div>
+  </div>
+    <div class="col-12 sm:text-right" *ngIf="displayShowTimesButton">
+      <p-toggleButton
+        offLabel="Show Times"
+        onLabel="Hide Times"
+        onIcon="pi pi-times"
+        offIcon="pi pi-clock"
+        [(ngModel)]="showTimes"
+        (onChange)="updateCalendarView()"
+        ></p-toggleButton>
+    </div>
+    <div class="col-12 sm:col-3" *ngIf="editable">
+      <p-button
+        label="Delete Week"
+        icon="pi pi-trash"
+        styleClass="p-button-danger"
+        [disabled]="!(weeks.length > 1)"
+        (onClick)="deleteWeek(activeWeekIndex)"
+        ></p-button>
+    </div>
+    <div [ngClass]="{
+      'paginator': true,
+      'col-12': true,
+      'sm:col-6': editable,
+      }">
+      <p-button
+        icon="pi pi-chevron-left"
+        styleClass="p-button-rounded p-button-text"
+        (onClick)="setActiveWeek(activeWeekIndex - 1)"
+        [disabled]="activeWeekIndex === 0"
+        ></p-button>
+      <div class="flex-1 text-center">
+        <h5 class="m-0">Week {{ weeks.length > 0 ? activeWeekIndex + 1 : 0 }} of {{ weeks.length }}</h5>
+      </div>
+      <p-button
+        icon="pi pi-chevron-right"
+        styleClass="p-button-rounded p-button-text"
+        (onClick)="setActiveWeek(activeWeekIndex + 1)"
+        [disabled]="activeWeekIndex === weeks.length - 1"
+        ></p-button>
+    </div>
+    <div class="col-12 sm:col-3 sm:text-right" *ngIf="editable">
+      <p-button
+        label="Add Week"
+        icon="pi pi-plus"
+        (onClick)="addWeek()"
+        ></p-button>
+    </div>
+  <div class="col-12">
+    <full-calendar #calendarRef [options]="calendarOptions"></full-calendar>
+  </div>
+</div>
+
+<p-menu
+  [model]="workoutTemplateActions"
+  [popup]="true"
+  ></p-menu>
+
+<p-overlayPanel>
+  <ng-template pTemplate="content">
+    <app-workout-template-preview
+      *ngIf="activeWorkoutTemplate$ | async as activeWorkoutTemplate"
+      [workoutTemplate]="activeWorkoutTemplate"
+      [showButtons]="false"
+      [linkToWorkoutTemplate]="true"
+      style="height: 200px;"
+      (mouseenter)="cancelClearOverlayCountdown()"
+      (mouseleave)="workoutTemplatePreviewOverlay?.hide()"
+      ></app-workout-template-preview>
+  </ng-template>
+</p-overlayPanel>
+
+
+<p-dialog
+  *ngIf="activeWorkoutTemplate$ | async as activeWorkoutTemplate"
+  [(visible)]="workoutTemplatePreviewVisible"
+  [style]="{width: '50vw'}"
+  [modal]="true"
+  appendTo="body"
+  >
+  <ng-template pTemplate="header">
+    <app-workout-template-item
+      [workoutTemplate]="activeWorkoutTemplate"
+      [linkToWorkoutTemplate]="true"
+      ></app-workout-template-item>
+  </ng-template>
+  <app-workout-template-preview
+    [workoutTemplate]="activeWorkoutTemplate"
+    [showHeader]="false"
+    [showButtons]="false"
+    style="height: 200px;"
+    (mouseenter)="cancelClearOverlayCountdown()"
+    (mouseleave)="workoutTemplatePreviewOverlay?.hide()"
+    ></app-workout-template-preview>
+</p-dialog>

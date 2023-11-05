@@ -1,0 +1,21 @@
+overwrite: true
+schema: "http://localhost:4000/api/graphql"
+documents: [
+  "src/**/*.graphql",
+]
+generates:
+  src/generated/graphql.types.ts:
+    plugins:
+      - "typescript"
+    config: {
+      inputMaybeValue: T | null | undefined
+    }
+  src/generated/graphql.generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-apollo-angular"
+    config: {
+      addExplicitOverride: true,
+      inputMaybeValue: T | null | undefined
+    }

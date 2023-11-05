@@ -1,0 +1,48 @@
+<div class="card main-container">
+  <div class="grid">
+    <div class="col-12">
+      <h4>
+        <i [class]="resourceMap['dashboard'].icon" style="font-size: 1.5rem"></i>
+        Get Started
+      </h4>
+    </div>
+  </div>
+  <div class="col-12">
+    <p-timeline [value]="steps" align="alternate" styleClass="hidden sm:block">
+      <ng-template pTemplate="content" let-step>
+        <ng-container *ngTemplateOutlet="createButton; context: { step: step }"></ng-container>
+      </ng-template>
+      <ng-template pTemplate="opposite" let-step>
+        <ng-container *ngTemplateOutlet="stepCard; context: { step: step, showButton: false }"></ng-container>
+      </ng-template>
+    </p-timeline>
+  </div>
+  <div class="block sm:hidden">
+    <ng-container *ngFor="let step of steps">
+      <ng-container *ngTemplateOutlet="stepCard; context: { step: step, showButton: true }"></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #stepCard let-step="step" let-showButton="showButton">
+  <div class="card" appMarkdownRouterLink>
+    <h5>
+      <i [class]="step.icon" style="font-size: 1.4rem"></i>
+      {{ step.header }}
+    </h5>
+    <p markdown [data]="step.body"></p>
+    <ng-container *ngIf="showButton">
+      <ng-container *ngTemplateOutlet="createButton; context: { step: step }"></ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #createButton let-step="step">
+  <p-button
+    size="large"
+    [label]="step.buttonLabel"
+    styleClass="p-button-lg"
+    [routerLink]="step.link"
+    icon="pi pi-plus"
+    ></p-button>
+</ng-template>

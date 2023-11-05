@@ -1,0 +1,32 @@
+.placeholder-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  height: 40vh;
+  background-color: rgba(255, 255, 255, 0.8); /* Adjust the opacity as needed */
+}
+
+.placeholder-icon {
+  font-size: 13rem; /* Adjust the size of the icon */
+  opacity: 0.12; /* Adjust the opacity of the icon */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.placeholder-text {
+  font-size: 1.5rem; /* Adjust the font size of the text */
+  font-weight: 500;
+  opacity: 0.9; /* Adjust the opacity of the text */
+  text-align: center;
+}
+
+@media screen and (min-width: 576px) {
+  .placeholder-container {
+    height: 70vh;
+  }
+}

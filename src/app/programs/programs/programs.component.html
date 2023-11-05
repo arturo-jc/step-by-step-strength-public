@@ -1,0 +1,48 @@
+<div class="card">
+  <div class="grid">
+    <div class="col-12 sm:col-6">
+      <h4>
+        <i [class]="resourceMap['programs'].icon" style="font-size: 1.5rem"></i>
+        Programs
+      </h4>
+    </div>
+    <div class="col-12 sm:col-6">
+      <div class="flex sm:justify-content-end">
+        <p-button label="New" icon="pi pi-plus" [routerLink]="[ '/programs', 'new' ]"></p-button>
+      </div>
+    </div>
+    <div class="col-12 sm:col-8 sm:flex-order-2">
+      <app-program-preview
+        *ngIf="selectedProgram"
+        [program]="selectedProgram"
+        [workouts]="selectedProgram.workouts"
+        [previewWorkoutOnHover]="true"
+        >
+      </app-program-preview>
+      <app-selected-item-placeholder
+        *ngIf="!selectedProgram"
+        [placeholderText]="'Select a program to preview it here'"
+        [icon]="resourceMap['programs'].icon"
+        ></app-selected-item-placeholder>
+    </div>
+    <div class="col-12 sm:col-4 max-height">
+      <p-listbox
+        *ngIf="programsService.programs$ | async as programs"
+        emptyMessage="You have no programs yet"
+        [options]="programs"
+        [(ngModel)]="selectedProgram"
+        [listStyle]="{'max-height':'250px'}"
+        optionLabel="name"
+        >
+        <ng-template let-program pTemplate="item">
+          <div>
+            <div class="font-bold mr-2">
+              {{ program.name }}
+            </div>
+            <small>{{ program | programDescription }}</small>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="card main-container">
+  <div class="grid">
+    <div class="col-12 sm:col-6">
+      <h4>
+        <i [class]="resourceMap['workouts'].icon" style="font-size: 1.5rem"></i>
+        Workouts
+      </h4>
+    </div>
+    <div class="col-12 sm:col-6">
+      <div class="flex gap-2 justify-content-between sm:justify-content-end">
+        <p-toggleButton
+          offLabel="Hide Prests"
+          onLabel="Show Presets"
+          onIcon="pi pi-eye"
+          offIcon="pi pi-eye-slash"
+          (onChange)="toggleHidePresets($event.checked)"
+          ></p-toggleButton>
+        <p-button label="New" icon="pi pi-plus" [routerLink]="[ 'new' ]"></p-button>
+      </div>
+    </div>
+    <div class="col-12 sm:col-8 sm:flex-order-2 max-height">
+      <div
+        *ngIf="selectedWorkoutTemplate"
+        class="flex flex-column"
+        [style]="{ height: '100%' }"
+        >
+        <app-workout-template-preview
+          [workoutTemplate]="selectedWorkoutTemplate"
+          [showButtons]="true"
+          ></app-workout-template-preview>
+      </div>
+      <app-selected-item-placeholder
+        *ngIf="!selectedWorkoutTemplate"
+        [placeholderText]="'Select a workout to preview it here'"
+        [icon]="resourceMap['workouts'].icon"
+        ></app-selected-item-placeholder>
+    </div>
+    <div class="col-12 sm:col-4 max-height">
+      <p-listbox
+        *ngIf="filteredWorkoutTemplates$ | async as workoutTemplates"
+        class="no-inner-padding"
+        emptyMessage="You have no workout templates yet"
+        [options]="workoutTemplates"
+        [(ngModel)]="selectedWorkoutTemplate"
+        optionLabel="name"
+        [style]="{ height: '100%' }"
+        [listStyle]="{ overflow: 'auto', maxHeight: '100%' }"
+        >
+        <ng-template let-workoutTemplate pTemplate="item">
+          <div class="item">
+            <app-workout-template-item
+              [workoutTemplate]="workoutTemplate"
+              size="small"
+              ></app-workout-template-item>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </div>
+  </div>
+</div>

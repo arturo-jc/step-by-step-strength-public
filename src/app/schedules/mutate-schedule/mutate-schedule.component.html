@@ -1,0 +1,71 @@
+<div class="card">
+  <div class="grid">
+    <div class="col-12 sm:col-6 flex align-items-center">
+      <app-edit-in-place
+        #editNameInPlace
+        [(text)]="name"
+        (textChange)="markAsChanged()"
+        placeholder="Enter a name"
+        ></app-edit-in-place>
+    </div>
+    <div class="col-12 sm:col-6 flex gap-2 justify-content-between sm:justify-content-end">
+      <p-button
+        [label]="hasChanges ? 'Discard Changes' : 'Cancel'"
+        [icon]="hasChanges ? 'pi pi-trash' : 'pi pi-arrow-left'"
+        styleClass="p-button-outlined"
+        (onClick)="discardChanges()"
+        ></p-button>
+      <span
+        [pTooltip]="hasChanges ? undefined : 'No changes to save'"
+        tooltipPosition="bottom"
+        >
+        <p-button
+          (onClick)="saveChanges(true)"
+          [label]="saving ? 'Saving...' : 'Save Changes'"
+          [icon]="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'"
+          [disabled]="editNameInPlace.active || workoutCount === 0 || saving || !hasChanges"
+          ></p-button>
+      </span>
+    </div>
+    <div class="col-12">
+      <app-schedule-preview
+        [(weeks)]="weeks"
+        (weeksChange)="handleWeekChanges($event)"
+        (onWorkoutTemplatedDropped)="fixedOverlayRef?.show()"
+        [editable]="true"
+        [displayShowTimesButton]="true"
+        ></app-schedule-preview>
+    </div>
+  </div>
+</div>
+
+<app-fixed-overlay #fixedOverlay *ngIf="workoutTemplates$ | async as workoutTemplates">
+  <p-listbox
+    #listBox
+    [options]="workoutTemplates"
+    [filter]="true"
+    [readonly]="true"
+    [group]="true"
+    [listStyle]="{ maxHeight: '15rem' }"
+    filterBy="name"
+    [listStyle]="{ maxHeight: '15rem' }"
+    class="no-inner-padding"
+    >
+    <ng-template let-workoutTemplate pTemplate="item">
+      <div
+        [class]="draggableSelector + ' item'"
+        [attr.data-event]="workoutTemplate | workoutTemplateData"
+        >
+        <app-workout-template-item [workoutTemplate]="workoutTemplate" size="small"></app-workout-template-item>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptyfilter">
+      <p-button
+        [label]="'Add ' + listBox._filterValue"
+        styleClass="p-button-text"
+        icon="pi pi-plus"
+        (onClick)="goToCreateWorkoutTemplate(listBox._filterValue)"
+        ></p-button>
+    </ng-template>
+  </p-listbox>
+</app-fixed-overlay>

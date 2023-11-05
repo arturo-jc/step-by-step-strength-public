@@ -1,0 +1,45 @@
+<div [formGroup]="exerciseItemForm" class="grid">
+  <div class="col">
+    <div class="p-float-label">
+      <input id="exerciseType" type="text" pInputText formControlName="exerciseType">
+      <label for="exerciseType">Exercise Type</label>
+    </div>
+  </div>
+  <div class="col">
+    <div class="p-float-label">
+      <p-dropdown
+        placeholder="Select a category"
+        formControlName="category"
+        [options]="categories"
+        id="category"
+        appendTo="body"
+        ></p-dropdown>
+      <label for="category">Category</label>
+    </div>
+  </div>
+  <div class="col">
+    <div class="p-float-label">
+      <p-multiSelect
+        [options]="metrics"
+        formControlName="metrics"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        ></p-multiSelect>
+    </div>
+  </div>
+</div>
+<div class="p-dialog-footer">
+  <p-button
+    label="cancel"
+    icon="pi pi-times"
+    styleClass="p-button-outlined p-button-danger"
+    (onClick)="cancel()"
+    ></p-button>
+  <p-button
+    label="Add Exercise Item"
+    icon="pi pi-check"
+    (onClick)="mutate()"
+    [disabled]="!exerciseItemForm.valid"
+    ></p-button>
+</div>

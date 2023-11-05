@@ -1,0 +1,16 @@
+fragment BaseExercise on Exercise {
+  id
+  name
+  order
+}
+
+fragment Exercise_Sets on Exercise {
+  sets {
+    ...FullProgramSet
+  }
+}
+
+fragment FullExercise on Exercise {
+  ...BaseExercise
+  ...Exercise_Sets
+}

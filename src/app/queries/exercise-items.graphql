@@ -1,0 +1,36 @@
+mutation CreateExerciseItems($exerciseItems: [CreateExerciseItemInput!]!) {
+  createExerciseItems(exerciseItems: $exerciseItems) {
+    ...BaseExerciseItem
+  }
+}
+
+mutation DeleteExerciseItems($exerciseItemIds: [String!]!) {
+  deleteExerciseItems(exerciseItemIds: $exerciseItemIds)
+}
+
+mutation UpdateExerciseItems($exerciseItems: [UpdateExerciseItemInput!]!) {
+  updateExerciseItems(exerciseItems: $exerciseItems) {
+    ...BaseExerciseItem
+  }
+}
+
+query ExerciseItems($fitler: ExerciseItemFilter) {
+  exerciseItems(filter: $fitler) {
+    ...BaseExerciseItem
+  }
+}
+
+fragment BaseExerciseItem on ExerciseItem {
+  id
+  exerciseType
+  category
+  preset
+  active
+  key
+  trackWeight
+  trackReps
+  trackDuration
+  trackDistance
+  trackIntensity
+  trackIncline
+}

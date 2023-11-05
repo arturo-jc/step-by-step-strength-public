@@ -1,0 +1,31 @@
+<input type="text" readonly="readonly" class="p-colorpicker-preview p-inputtext mr-2" [style]="{ 'background-color': workoutTemplate.backgroundColor }">
+<div>
+  <div class="flex">
+    <ng-container [ngSwitch]="size">
+      <span class="font-bold" *ngSwitchCase="'small'">
+        <ng-container [ngTemplateOutlet]="workoutTemplateName"></ng-container>
+      </span>
+      <h5 class="mb-0" *ngSwitchCase="'medium'">
+        <ng-container [ngTemplateOutlet]="workoutTemplateName"></ng-container>
+      </h5>
+    </ng-container>
+  </div>
+  <small>{{ workoutTemplate | workoutTemplateDescription }}</small>
+</div>
+
+<ng-template #workoutTemplateName>
+  <ng-container *ngIf="!linkToWorkoutTemplate">
+    {{ workoutTemplate.name }}
+    <app-preset-indicator
+      [preset]="workoutTemplate.preset"
+      [objectType]="'workout'"
+      ></app-preset-indicator>
+  </ng-container>
+  <a href="#" (click)="goToWorkoutTemplate($event)" *ngIf="linkToWorkoutTemplate">
+    {{ workoutTemplate.name }}
+    <app-preset-indicator
+      [preset]="workoutTemplate.preset"
+      [objectType]="'workout'"
+      ></app-preset-indicator>
+  </a>
+</ng-template>

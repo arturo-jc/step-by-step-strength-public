@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="grid">
+    <div class="col-12 sm:col-6 flex align-items-center">
+      <app-edit-in-place
+        #editInPlace
+        [(text)]="name"
+        (textChange)="markAsChanged()"
+        placeHolder="Enter a name"
+        ></app-edit-in-place>
+    </div>
+    <div class="col-12 sm:col-6 flex gap-2 justify-content-between sm:justify-content-end">
+      <p-button
+        [label]="hasChanges ? 'Discard Changes' : 'Cancel'"
+        [icon]="hasChanges ? 'pi pi-trash' : 'pi pi-arrow-left'"
+        styleClass="p-button-outlined"
+        (onClick)="discardChanges()"
+        ></p-button>
+      <span
+        [pTooltip]="hasChanges ? undefined : 'No changes to save'"
+        tooltipPosition="left"
+        >
+        <p-button
+          (onClick)="saveChanges(true)"
+          [label]="saving ? 'Saving...' : 'Save Changes'"
+          [icon]="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'"
+          [disabled]="editInPlace.active || workouts.length === 0 || saving || !hasChanges"
+          ></p-button>
+      </span>
+    </div>
+    <div class="col-12">
+      <app-program-preview
+        [(workouts)]="workouts"
+        [showMutateButtons]="false"
+        (workoutsChange)="markAsChanged()"
+        [editable]="true"
+        ></app-program-preview>
+    </div>
+  </div>
+</div>

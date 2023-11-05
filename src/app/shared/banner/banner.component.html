@@ -1,0 +1,53 @@
+<div *ngIf="layoutService.activeBanner$ | async as activeBanner" class="bg-bluegray-900 text-gray-100 p-3 flex justify-content-center align-items-center flex-wrap">
+  <ng-container [ngSwitch]="activeBanner.bannerType">
+    <ng-container *ngSwitchCase="'default'">
+      <div class="font-bold mr-8">🔥 Hot Deals!</div>
+      <div class="align-items-center flex">
+        <span class="line-height-3">Libero voluptatum atque exercitationem praesentium provident odit.</span>
+      </div>
+      <a class="flex align-items-center ml-2 mr-8">
+        <a class="text-white" href="#"><span class="underline font-bold">Learn More</span></a>
+      </a>
+    </ng-container>
+    <ng-container *ngSwitchCase="'guestMode'">
+      <div class="align-items-center flex">
+        <span class="line-height-3">You are in Guest Mode: Your data is not permanently saved.</span>
+      </div>
+      <a class="flex align-items-center ml-2 mr-8">
+        <a class="text-white" href="#" (click)="openGuestModeDialog($event)"><span class="underline font-bold">Learn More</span></a>
+      </a>
+    </ng-container>
+  </ng-container>
+  <a
+    *ngIf="activeBanner.closable"
+    pRipple
+    (click)="close()"
+    class="flex align-items-center no-underline justify-content-center border-circle text-gray-50 hover:bg-bluegray-700 cursor-pointer transition-colors transition-duration-150"
+    style="width:2rem; height: 2rem"
+    >
+    <i class="pi pi-times"></i>
+  </a>
+</div>
+
+<p-dialog
+  header="Secure Your Progress"
+  [(visible)]="guestModeDialogVisible"
+  [style]="{width: '50vw'}"
+  [modal]="true"
+  appendTo="body"
+  >
+  <p>Thank you for using <b>{{ appName }}</b> in Guest Mode!</p>
+  <p>In this mode, your workout data is being saved temporarily on your device, but it won't be preserved if you navigate away or clear your browser's data.</p>
+  <p>If you don't want to risk losing your hard-earned progress, we strongly recommend registering or logging in. This way, you'll ensure that your workouts, schedules, and programs are securely stored and accessible whenever you need them.</p>
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Log In"
+      (onClick)="goToAuth('/login')"
+      styleClass="p-button-outlined"
+      ></p-button>
+    <p-button
+      (onClick)="goToAuth('/signup')"
+      label="Register"
+      ></p-button>
+  </ng-template>
+</p-dialog>

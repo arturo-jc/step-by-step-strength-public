@@ -1,0 +1,16 @@
+fragment FullExerciseTemplate on ExerciseTemplate {
+  ...BaseExerciseTemplate
+  ...ExerciseTemplate_SetTemplates
+}
+
+fragment BaseExerciseTemplate on ExerciseTemplate {
+  id
+  name
+  order
+}
+
+fragment ExerciseTemplate_SetTemplates on ExerciseTemplate {
+  setTemplates {
+    ...BaseSetTemplate
+  }
+}
